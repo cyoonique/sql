@@ -5,8 +5,8 @@ USE bookShop
 CREATE TABLE books (
     bookID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
     title VARCHAR(100),
-    authorFName VARCHAR(100),
-    authorLName VARCHAR(100),
+    authorFName VARCHAR(50),
+    authorLName VARCHAR(50),
     releaseYear INT,
     stockQty INT,
     pages INT
