@@ -1,0 +1,31 @@
+SELECT CURTIME();
+
+SELECT CURDATE();
+
+SELECT DAYOFWEEK(CURDATE());
+SELECT DAYOFWEEK(NOW());
+SELECT DATE_FORMAT(NOW(), '%w') + 1;
+
+SELECT DAYNAME(NOW());
+SELECT DATE_FORMAT(NOW(), '%W');
+
+SELECT DATE_FORMAT(CURDATE(), '%m/%d/%Y');
+
+SELECT DATE_FORMAT(NOW(), '%M %D at %h:%i');
+
+CREATE TABLE tweets(
+    content VARCHAR(140),
+    userName VARCHAR(20),
+    createdAt TIMESTAMP DEFAULT NOW()
+    );
+    
+    
+INSERT INTO tweets (content, userName)
+VALUES ('This is my first tweet', 'cy');
+
+SELECT * FROM tweets;
+
+INSERT INTO tweets (content, userName)
+VALUES ('This is my second tweet', 'cy');
+
+SELECT * FROM tweets;
