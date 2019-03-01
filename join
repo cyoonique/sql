@@ -1,0 +1,64 @@
+CREATE TABLE customers(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    firstName VARCHAR(100),
+    lastName VARCHAR(100),
+    email VARCHAR(100));
+
+CREATE TABLE orders(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    orderDate DATE,
+    amount DECIMAL(8,2),
+    customerId INT,
+    FOREIGN KEY(customerId) REFERENCES customers(id));
+
+INSERT INTO customers(firstName, lastName, email) 
+VALUES ('Boy', 'George', 'george@gmail.com'),
+      ('George', 'Michael', 'gm@gmail.com'),
+      ('David', 'Bowie', 'david@gmail.com'),
+      ('Blue', 'Steele', 'blue@gmail.com'),
+      ('Bette', 'Davis', 'bette@aol.com');
+       
+INSERT INTO orders(orderDate, amount, customerId)
+VALUES ('2016/02/10', 99.99, 1),
+      ('2017/11/11', 35.50, 1),
+      ('2014/12/12', 800.67, 2),
+      ('2015/01/03', 12.50, 2),
+      ('1999/04/11', 450.25, 5);
+
+INSERT INTO (orderDate, amount, customerId)
+VALUES ('2016/06/06', 33.67, 98);
+
+SELECT * FROM orders;
+
+SELECT * FROM customers WHERE lastName='George';
+SELECT * FROM orders WHERE customerId=1;
+--OR
+SELECT * FROM orders WHERE customerId=(SELECT id FROM customers WHERE lastName='George');
+
+--CROSS JOIN
+SELECT * FROM customers, orders;
+--IMPLICIT INNER JOIN
+SELECT * FROM customers, orders WHERE customers.id=orders.customerId;
+SELECT firstName, lastName, orderDAte, amount FROM customers, orders WHERE customers.id=orders.customerId;
+--EXPLICIT INNER JOIN
+SELECT * FROM customers JOIN orders ON customer.id=orders.customersId;
+
+SELECT * FROM customers INNER JOIN orders ON customer.id=orders.customerId GROUP BY orders.customerId;
+
+SELECT firstName, lastName, SUM(amount) AS totalSpent FROM customers JOIN orders ON customers.id= orders.customerId GROUP BY orders.customersId ORDER BY orders.totalSpent DESC;
+
+--LEFT JOIN: take everything from left table and union
+SELECT * FROM customers LEFT JOIN orders ON customer.id=orders.customerId;
+
+SELECT firstName, lastName, IFNULL(SUM(amount), 0) AS totalAmount FROM customers LEFT JOIN orders ON customers.id= orders.customerId GROUP BY customers.id ORDER BY totalAmount;
+
+--RIGHT JOIN
+SELECT * FROM customers RIGHT JOIN orders ON customers.id=orders.customerId;
+
+--ON DELETE CASCADE
+CREATE TABLE orders(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    orderDate DATE,
+    amount DECIMAL(8,2),
+    customerId INT,
+    FOREIGN KEY(customerId) REFERENCES customers(id) ON DELETE CASCADE);
