@@ -1,0 +1,87 @@
+CREATE DATABASE instagramClone;
+USE instagramClone;
+
+CREATE TABLE users(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    userName VARCHAR(255) UNIQUE NOT NULL,
+    createdAt TIMESTAMP DEFAULT NOW());
+
+INSERT INTO users(userName) VALUES
+('blueTheCat'),
+('CharlieBrown'),
+('ColtSteele');
+
+--photos table
+CREATE TABLE photos(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    imageUrl VARCHAR(255) NOT NULL,
+    userId INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY(userId) REFERENCES users(id));
+    
+INSERT INTO photos(imageUrl, userId) VALUES
+('/alskjd75',1),
+('/lkajsd98',2),
+('/90jddlkj',2);
+
+SELECT photos.imageurl, users.username FROM photos JOIN users ON photos.userId= users.id;
+
+CREATE TABLE comments(
+    id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+    commentText VARCHAR(255) NOT NULL,
+    userId INT NOT NULL,
+    photoId INT NOT NULL,
+    createdAT TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (photoId) REFERENCES photos(id));
+
+INSERT INTO comments(commentText, userId, photoId) VALUES
+('Meow!',1,2),
+('Amazing shot',3,2),
+('I <3 This',2,1);
+
+--LIKES in instagram
+CREATE TABLE likes(
+    userId INTEGER NOT NULL,
+    photoId INTEGER NOT NULL,
+    createdAt TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (userId) REFERENCES users(id),
+    FOREIGN KEY (photoId) REFERENCES photos(id),
+    PRIMARY KEY (userId, photoId));
+
+INSERT INTO likes(userId,photoId) VALUES
+(1,1),
+(2,1),
+(1,2),
+(1,3),
+(3,3);
+
+--error: won't work because of primary key
+INSERT INTO likes(userId,photoId) VALUES (1,1);
+
+CREATE TABLE follows(
+    followerId INT NOT NULL,
+    followeeId INT NOT NULL,
+    createdAt TIMESTAMP DEFAULT NOW(),
+    FOREIGN KEY (followerId) REFERENCES users(id),
+    FOREIGN KEY (followeeId) REFERENCES users(id),
+    PRIMARY KEY(followerId, followeeId));
+
+INSERT INTO follows (followerId, followeeId) VALUES
+(1,2),
+(1,3),
+(3,1),
+(2,3);
+
+--hash tag
+CREATE TABLE tags(
+    id INT AUTO_INCREMENT PRIMARY KEY,
+    tagName VARCHAR(255) UNIQUE,
+    createdAt TIMESTAMP DEFAULT NOW());
+    
+CREATE TABLE photoTags(
+    photoId INT NOT NULL,
+    tagId INT NOT NULL,
+    FOREIGN KEY (photoId) REFERENCES photos(id),
+    FOREIGN KEY (tagId) REFERENCES tags(id),
+    PRIMARY KEY (photoId,tagId));
